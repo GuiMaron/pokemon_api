@@ -38,7 +38,7 @@ A simple architecture, with a client-facing NGINX
 We have 3 important services, the `frontend` running a `Swagger` and the `api` running a NodeJS application
 To Database used was `MongoDB`
 
-![Architecture](architecture.jpg "Architecture")
+![Architecture](architecture.png "Architecture")
 
 # Time
 
