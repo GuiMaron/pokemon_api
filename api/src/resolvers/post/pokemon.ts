@@ -61,7 +61,7 @@ function adaptPokemon(originalPokemon: Partial<Pokemon>): Partial<Pokemon> {
     id: numToId(`${originalPokemon.id}`),
     num: idToNum(originalPokemon.id),
     name: originalPokemon.name,
-    img: originalPokemon.img ?? '', 
+    img: originalPokemon.img ?? '',
     type: originalPokemon.type.map(
       (type: string) => <Type>`${type.at(0).toLocaleUpperCase()}${type.substring(1).toLocaleLowerCase()}`,
     ),
@@ -176,7 +176,7 @@ export async function postPokemon(parameters: null, query: null, body: postPokem
   if (pokemon.prev_evolution) {
     const updateResult = await getMongoDbInstance().updateMany(
       { num: { $in: [...pokemon.prev_evolution.map((index: PokemonIndex) => index.num)] } },
-      { $push: { next_evolutions: index } },
+      { $push: { next_evolution: index } },
     );
     if (updateResult instanceof Error || !updateResult) {
       return new AppError(true, UPDATE_DATA_ERROR_MESSAGE);
@@ -187,7 +187,7 @@ export async function postPokemon(parameters: null, query: null, body: postPokem
   if (pokemon.next_evolution) {
     const updateResult = await getMongoDbInstance().updateMany(
       { num: { $in: [...pokemon.next_evolution.map((index: PokemonIndex) => index.num)] } },
-      { $push: { prev_evolutions: index } },
+      { $push: { prev_evolution: index } },
     );
     if (updateResult instanceof Error || !updateResult) {
       return new AppError(true, UPDATE_DATA_ERROR_MESSAGE);
