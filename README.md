@@ -32,6 +32,9 @@ To restart it
 Usefull script (to reset database to the original state), from the `\api` folder
 ### `npm run reset-db`
 
+But before you will need to install the dependencies with
+### `npm install --package-lock`
+
 # Architecture
 
 A simple architecture, with a client-facing NGINX
