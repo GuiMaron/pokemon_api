@@ -48,7 +48,7 @@ In the 5 hours span I was able to fetch pokemon, validate some endpoints and cre
 
 # Struggles
 
-I had some problems with the `default.conf(.div)` NGINX configuration files. Also with the Swagger configuration. So I still have a
+I had some problems with the `default.conf(.dev)` NGINX configuration files. Also with the Swagger configuration. So I still have a
 warning and workaround around the POST endpoint in the `Swagger`
 
 # If I had more time?
