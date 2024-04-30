@@ -38,7 +38,7 @@ A simple architecture, with a client-facing NGINX
 We have 3 important services, the `frontend` running a `Swagger` and the `api` running a NodeJS application
 To Database used was `MongoDB`
 
-![Architecture](architecture.jpg "Architecture")
+![Architecture](architecture.png "Architecture")
 
 # Time
 
@@ -48,7 +48,7 @@ In the 5 hours span I was able to fetch pokemon, validate some endpoints and cre
 
 # Struggles
 
-I had some problems with the `default.conf(.div)` NGINX configuration files. Also with the Swagger configuration. So I still have a
+I had some problems with the `default.conf(.dev)` NGINX configuration files. Also with the Swagger configuration. So I still have a
 warning and workaround around the POST endpoint in the `Swagger`
 
 # If I had more time?
