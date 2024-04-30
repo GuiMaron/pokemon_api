@@ -61,6 +61,7 @@ function adaptPokemon(originalPokemon: Partial<Pokemon>): Partial<Pokemon> {
     id: numToId(`${originalPokemon.id}`),
     num: idToNum(originalPokemon.id),
     name: originalPokemon.name,
+    img: originalPokemon.img ?? '', 
     type: originalPokemon.type.map(
       (type: string) => <Type>`${type.at(0).toLocaleUpperCase()}${type.substring(1).toLocaleLowerCase()}`,
     ),
