@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  api:
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: "./api"
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - "/usr/app/node_modules"
+      - "./api:/usr/app"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "mongoadmin"
+      MONGO_INITDB_ROOT_PASSWORD: "mongopassword"
+      MONGO_CLUSTER_URL: "mongo:27017"
+      MONGO_DB_DATABASE: "pokemon"
+      MONGO_DB_COLLECTION: "pokemon"
+      API_USER: "master"
+      API_PASSWORD: "ash"
+      API_PORT: 3000
+    depends_on:
+      - mongo
+
+  nginx:
+    build:
+      dockerfile: "Dockerfile.dev"
+      context: "./nginx"
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+      - swagger-ui
+
+  swagger-ui:
+    image: "swaggerapi/swagger-ui:latest"
+    ports:
+      - "8080:4000"
+    environment:
+      - SWAGGER_JSON_URL=http://localhost/api/static/swagger.json
+    depends_on:
+      - api
+
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "mongoadmin"
+      MONGO_INITDB_ROOT_PASSWORD: "mongopassword"
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+volumes:
+  mongodata:
+    driver: local

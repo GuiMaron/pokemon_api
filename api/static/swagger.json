@@ -1,0 +1,312 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "<b>Authorization</b> \n - Username: `master` \n - Password: `ash`",
+    "version": "0.0.1",
+    "title": "Pokemon API Swagger",
+    "contact": { "email": "guilherme.maron@zoolengineering.se" }
+  },
+  "host": "localhost",
+  "basePath": "/api",
+  "schemes": ["http"],
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic",
+      "description": "HTTP Basic Authentication over `HTTP` "
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Authentication information is missing or invalid"
+      },
+      "PokemonList": {
+        "description": "A JSON array of Pokemon",
+        "schema": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Pokemon" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/pokemon": {
+      "post": {
+        "tags": ["pokemon"],
+        "summary": "POST a Pokemon",
+        "description": "API endpoint to add a pokémon to the database. \n - It should accept a pokémon as a parameter. \n - It should be possible to add a pokémon as the next or previous evolution of a already existing pokémon in the database. \n\n\n <b>For the request to suceed you will need to wrap the polemon with `{ \"pokemon\": { <current data> } }` </b> or use the following body: \n\n <code>{ \n \"pokemon\": {\n \"id\": 152, \n \"name\": \"Mewhalf\", \n \"type\": [\n 	\"Psychic\", \n 	\"Fighting\"\n ],\n \"height\": \"2,1 M\", \n \"weight\": \"130,0 KG\", \n \"candy\": \"Mewhalf CANDY\",\n \"candy_count\": 111, \n \"egg\": \"11 KM\", \n \"spawn_chance\": 0.0001, \n \"avg_spawns\": 0.01, \n \"spawn_time\": \"00:00\", \n \"multipliers\": [3.3, 6.6], \n \"prev_evolution\": [151], \n \"next_evolution\": [\"150\"]\n}\n}</code>",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "pokemon",
+            "in": "body",
+            "description": "A new Pokemon",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/new Pokemon"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "true"
+          },
+          "400": {
+            "description": "Error: Bad Request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        },
+        "security": [{ "basicAuth": [] }]
+      }
+    },
+    "/pokemon/{id}": {
+      "get": {
+        "tags": ["pokemon"],
+        "summary": "GET a Pokemon by ID and its evolutions",
+        "description": "API endpoint that gets a pokémon by its ID. \n - It should return next and previous evolutions as well. \n - If its next or previous evolutions have further evolutions, those should be included as well.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of a pokemon to search for",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PokemonList"
+          },
+          "400": {
+            "description": "Error: Bad Request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "security": [{ "basicAuth": [] }]
+      }
+    },
+    "/pokemon/type/{type}": {
+      "get": {
+        "tags": ["type"],
+        "summary": "GET Pokemons of a type and can sort them by different attributes",
+        "description": "API endpoint that filters Pokémon by type. \n - The endpoint should accept a type as a parameter and return all Pokémon of that type. \n - It should accept sorting as a parameter. Should be able to sort on most properties (for example weight).",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "A Pokemon Type",
+            "required": true,
+            "schema": {
+              "type": { "$ref": "#/definitions/Type" }
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Attribute to sort the search by",
+            "required": false,
+            "schema": {
+              "type": { "$ref": "#/definitions/SortableBy" }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PokemonList"
+          },
+          "400": {
+            "description": "Error: Bad Request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "security": [{ "basicAuth": [] }]
+      }
+    },
+    "/pokemon/name/{name}": {
+      "get": {
+        "tags": ["name"],
+        "summary": "GET a Pokemon by its name or a fragment of it ",
+        "description": "API endpoint that searches for a pokémon by name. \n - The endpoint should accept a string parameter with a minimum length of three. \n - The parameter should expect the name of a pokémon. \n - Matching the name should be fuzzy.",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "A Pokemon name or a fragment of it",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 3,
+              "maximum": 12
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PokemonList"
+          },
+          "400": {
+            "description": "Error: Bad Request"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        },
+        "security": [{ "basicAuth": [] }]
+      }
+    }
+  },
+  "definitions": {
+    "PokemonIndex": {
+      "type": "object",
+      "required": ["id", "num"],
+      "properties": {
+        "num": { "type": "string", "example": "002", "minimum": 3, "maximum": 3 },
+        "name": { "type": "string", "example": "Ivysaur", "minimum": 3, "maximum": 12 }
+      }
+    },
+    "Type": {
+      "type": "string",
+      "enum": [
+        "Normal",
+        "Fighting",
+        "Flying",
+        "Poison",
+        "Ground",
+        "Rock",
+        "Bug",
+        "Ghost",
+        "Steel",
+        "Fire",
+        "Water",
+        "Grass",
+        "Electric",
+        "Psychic",
+        "Ice",
+        "Dragon",
+        "Dark",
+        "Fairy",
+        "Stellar"
+      ]
+    },
+    "Pokemon": {
+      "type": "object",
+      "required": ["id", "num"],
+      "properties": {
+        "id": { "type": "integer", "format": "int64", "example": 1 },
+        "num": { "type": "string", "example": "001", "length": 3 },
+        "name": { "type": "string", "example": "Bulbasaur" },
+        "img": { "type": "string", "example": "http://www.serebii.net/pokemongo/pokemon/001.png" },
+        "type": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Type" },
+          "example": ["Grass", "Poison"]
+        },
+        "height": { "type": "string", "example": "0.71 m" },
+        "weight": { "type": "string", "example": "6.9 kg" },
+        "candy": { "type": "string", "example": "Bulbasaur Candy" },
+        "candy_count": { "type": "integer", "format": "int64", "example": 25 },
+        "egg": { "type": "string", "example": "2 km" },
+        "spawn_chance": { "type": "number", "multipleOf": "0.01", "example": "0.69" },
+        "avg_spawns": { "type": "integer", "format": "int64", "example": 69 },
+        "spawn_time": { "type": "string", "example": "20:00" },
+        "multipliers": { "type": "array", "items": { "type": "number", "multipleOf": "0.01", "example": "1.58" } },
+        "weaknesses": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Type" },
+          "example": ["Fire", "Ice", "Flying", "Psychic"]
+        },
+        "next_evolution": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/PokemonIndex"
+          },
+          "example": [
+            { "num": "002", "name": "Ivysaur" },
+            { "num": "003", "name": "Venusaur" }
+          ]
+        }
+      }
+    },
+    "new Pokemon": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "integer", "format": "int64", "example": 152 },
+        "name": { "type": "string", "example": "Mewhalf" },
+        "img": { "type": "string", "example": "" },
+        "type": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Type" },
+          "example": ["Psychic", "Fighting"]
+        },
+        "height": { "type": "string", "example": "2.10 m" },
+        "weight": { "type": "string", "example": "130.0 kg" },
+        "candy": { "type": "string", "example": "Mewhalf Candy" },
+        "candy_count": { "type": "integer", "format": "int64", "example": 111 },
+        "egg": { "type": "string", "example": "11 km" },
+        "spawn_chance": { "type": "number", "multipleOf": "0.0001", "example": "0.0001" },
+        "avg_spawns": { "type": "integer", "format": "int64", "example": 1 },
+        "spawn_time": { "type": "string", "example": "00:00" },
+        "multipliers": {
+          "type": "array",
+          "items": { "type": "number", "multipleOf": "0.01", "example": "3.3" }
+        },
+        "prev_evolution": {
+          "type": "array",
+          "items": { "type": "integer", "format": "int64", "example": 151 }
+        },
+        "next_evolution": {
+          "type": "array",
+          "items": { "type": "integer", "format": "int64", "example": 150 }
+        }
+      }
+    },
+    "PostPokemonRequest": {
+      "type": "object",
+      "required": ["pokemon"],
+      "properties": {
+        "pokemon": { "schema": { "$ref": "#/definitions/new Pokemon" } }
+      }
+    },
+    "SortableBy": {
+      "type": "string",
+      "enum": [
+        "id",
+        "num",
+        "name",
+        "height",
+        "weight",
+        "candy_count",
+        "egg",
+        "spawn_chance",
+        "avg_spawns",
+        "spawn_time"
+      ]
+    }
+  },
+  "externalDocs": {
+    "description": "Pokemon types",
+    "url": "https://bulbapedia.bulbagarden.net/wiki/Type#List_of_types"
+  }
+}
