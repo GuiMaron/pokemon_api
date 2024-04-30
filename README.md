@@ -29,6 +29,9 @@ To restart it
 
 ### `docker-compose -f docker-compose-dev.yml down && docker-compose -f docker-compose-dev.yml up --build`
 
+Usefull script (to reset database to the original state), from the `\api` folder
+### `npm run reset-db`
+
 # Architecture
 
 A simple architecture, with a client-facing NGINX
