@@ -42,7 +42,7 @@ export const JoiSchemas = {
   egg: Joi.string()
     .allow('')
     .pattern(/((^Not in Eggs$)|(^\d{1,2} km$))/i),
-  spawn_chance: Joi.number().allow(0, 0.0).positive().multiple(0.0001).max(1),
+  spawn_chance: Joi.number().allow(0, 0.0, null).positive().multiple(0.0001).max(1),
   minimum_spawn_chance: Joi.number().positive().multiple(0.0001).min(0.0001).max(1),
   spawn_time: Joi.string().pattern(/(^N\/A$)/i),
 };
