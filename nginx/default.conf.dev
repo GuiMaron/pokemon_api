@@ -1,0 +1,26 @@
+upstream swagger-ui {
+    server  swagger-ui:8080;
+}
+
+upstream api {
+    server  api:3000;
+}
+
+
+server {
+
+    listen  80;
+
+    location    / {
+        proxy_pass  http://swagger-ui;
+    }
+
+    location    /api {
+        proxy_pass  http://api;
+    }
+
+    location    /api/static {
+        proxy_pass  http://api/static;
+    }
+
+}
