@@ -62,3 +62,4 @@ Well, if I had even more time I would improve this points first
 - writing tests, I already set up the tests container, but scrapped it midway
 - improve logging
 - improve returning error codes: `201`, `404`
+- migrating the database to an Atlas managed one, so it would be able to perform real fuzzy searches
