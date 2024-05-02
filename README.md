@@ -45,7 +45,7 @@ To Database used was `MongoDB`
 
 # Time
 
-I spent around 20 hours in this project
+I spent around 10-12 hours in this project
 
 In the 5 hours span I was able to fetch pokemon, validate some endpoints and create the base of everything: `RequestHandler`, `validator`, several `Joi.schemas`
 
