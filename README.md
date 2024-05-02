@@ -47,12 +47,12 @@ To Database used was `MongoDB`
 
 I spent around 10-12 hours in this project
 
-In the 5 hours span I was able to fetch pokemon, validate some endpoints and create the base of everything: `RequestHandler`, `validator`, several `Joi.schemas`
+In the 5 hours span I was able to fetch pokemon, validate some endpoints and create the base of everything: `RequestHandler`, `validator`, several `Joi.schemas`, authentication, MongoDB client and some of the queries also.
 
 # Struggles
 
 I had some problems with the `default.conf(.dev)` NGINX configuration files. Also with the Swagger configuration. So I still have a
-warning and workaround around the POST endpoint in the `Swagger`
+warning and workaround around the POST endpoint in the `Swagger` page
 
 # If I had more time?
 
